@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Happy Birthday Daddy Ko</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow:hidden;
+}
+
+.card{
+    background:#1e293b;
+    padding:40px;
+    border-radius:20px;
+    max-width:600px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(59,130,246,.2);
+}
+
+h1{
+    color:#60a5fa;
+}
+
+button{
+    background:#3b82f6;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    margin:10px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#2563eb;
+}
+
+input{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    font-size:16px;
+    width:220px;
+    text-align:center;
+}
+
+.hidden{
+    display:none;
+}
+
+#emojiRain{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+
+.emoji{
+    position:absolute;
+    font-size:30px;
+    animation:fall 5s linear infinite;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-100px);
+    }
+    to{
+        transform:translateY(110vh);
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card" id="mainCard">
+
+<h1>🎉 Happy Birthday, Daddy Ko! 🎉</h1>
+
+<p>
+Happy Birthday, Daddy ko ❤️<br><br>
+
+Thank you for being my favorite person, my safe place,
+my partner, my ka-chikahan, and my best friend.
+
+Today is all about celebrating YOU.
+
+Before claiming your birthday reward, we need to verify
+that you are the Real Husband™.
+</p>
+
+<button onclick="startVerification()">
+Click Here
+</button>
+
+</div>
+
+<div id="emojiRain"></div>
+
+<script>
+
+function startVerification(){
+
+let answer=confirm("SECURITY CHECK\n\nAre you Iah's husband?");
+
+if(answer){
+
+let birthday=prompt("When is your birthday?\n\nFormat: MM/DD");
+
+if(birthday==="12/3/98"){
+
+let love=confirm("FINAL SECURITY CHECK\n\nDO YOU LOVE YOUR WIFE?");
+
+if(love || !love){
+
+showSuccess();
+
+}
+
+}
+else{
+
+alert("⚠ Identity verification failed.\nSuspicious user detected.");
+
+}
+
+}
+else{
+
+showAngryMode();
+
+}
+
+}
+
+function showAngryMode(){
+
+document.body.style.background="#7f1d1d";
+
+document.getElementById("mainCard").innerHTML=`
+
+<h1>🚫 ACCESS DENIED 🚫</h1>
+
+<p>
+Only Iah's husband may proceed.<br><br>
+Nice try, stranger.
+</p>
+
+<button onclick="location.reload()">
+Try Again
+</button>
+
+`;
+
+let container=document.getElementById("emojiRain");
+
+for(let i=0;i<80;i++){
+
+let emoji=document.createElement("div");
+
+emoji.classList.add("emoji");
+
+emoji.innerHTML="😡";
+
+emoji.style.left=Math.random()*100+"vw";
+emoji.style.animationDuration=(Math.random()*3+2)+"s";
+
+container.appendChild(emoji);
+
+}
+
+}
+
+function showSuccess(){
+
+document.getElementById("mainCard").innerHTML=`
+
+<h1>✅ AUTHENTICATION SUCCESSFUL</h1>
+
+<p>
+
+Identity verified.<br>
+Husband Status Confirmed.<br>
+Love Level Detected: 100% ❤️<br><br>
+
+Congratulations!<br><br>
+
+You passed all security checks.
+
+</p>
+
+<h3>Your reward is waiting...</h3>
+
+<button onclick="showReward()">
+CLAIM REWARD
+</button>
+
+`;
+
+}
+
+function showReward(){
+
+document.getElementById("mainCard").innerHTML=`
+
+<h1>🎁 Birthday Reward Unlocked 🎁</h1>
+
+<p id="loadingText">
+Initializing surprise...
+</p>
+
+`;
+
+let messages = [
+"Verifying husband credentials... ✅",
+"Loading birthday package... ✅",
+"Loading memories... ✅",
+"Loading wife.exe... ✅",
+"Launching surprise... 🚀"
+];
+
+let counter = 0;
+
+let timer = setInterval(() => {
+
+document.getElementById("loadingText").innerHTML +=
+"<br>" + messages[counter];
+
+counter++;
+
+if(counter >= messages.length){
+
+clearInterval(timer);
+
+setTimeout(()=>{
+
+window.location.href="https://happy-daddae-day.my.canva.site";
+
+},2000);
+
+}
+
+},1000);
+
+}
+
+</script>
+
+</body>
+</html>
