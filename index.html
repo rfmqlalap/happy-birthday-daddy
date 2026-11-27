@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,40 +8,53 @@
 
 <style>
 
-body{
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
     font-family:'Segoe UI',sans-serif;
     background:#0f172a;
     color:white;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:100vh;
-    overflow:hidden;
+    padding:20px;
+    overflow-x:hidden;
 }
 
 .card{
     background:#1e293b;
-    padding:40px;
-    border-radius:20px;
+    width:100%;
     max-width:600px;
+    padding:30px;
+    border-radius:20px;
     text-align:center;
-    box-shadow:0 0 30px rgba(59,130,246,.2);
+    box-shadow:0 0 30px rgba(59,130,246,.3);
 }
 
 h1{
     color:#60a5fa;
+    margin-bottom:20px;
+}
+
+p{
+    line-height:1.8;
 }
 
 button{
     background:#3b82f6;
     color:white;
     border:none;
-    padding:12px 25px;
-    margin:10px;
+    padding:14px 24px;
     border-radius:10px;
     cursor:pointer;
+    margin:8px;
     font-size:16px;
+    transition:.3s;
 }
 
 button:hover{
@@ -49,31 +62,49 @@ button:hover{
 }
 
 input{
-    padding:10px;
-    border-radius:10px;
+    width:100%;
+    margin-top:15px;
+    padding:12px;
     border:none;
+    border-radius:10px;
+    text-align:center;
     font-size:16px;
-    width:220px;
+}
+
+#popup{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    padding:20px;
+}
+
+.popup-card{
+    background:#1e293b;
+    width:100%;
+    max-width:400px;
+    padding:25px;
+    border-radius:20px;
     text-align:center;
 }
 
 .hidden{
-    display:none;
+    display:none !important;
 }
 
 #emojiRain{
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
     pointer-events:none;
 }
 
 .emoji{
     position:absolute;
-    font-size:30px;
-    animation:fall 5s linear infinite;
+    font-size:35px;
+    animation:fall linear forwards;
 }
 
 @keyframes fall{
@@ -85,8 +116,28 @@ input{
     }
 }
 
-</style>
+.loading{
+    text-align:left;
+    margin-top:20px;
+}
 
+@media(max-width:500px){
+
+    .card{
+        padding:22px;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    button{
+        width:100%;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
@@ -96,169 +147,280 @@ input{
 <h1>🎉 Happy Birthday, Daddy Ko! 🎉</h1>
 
 <p>
-Happy Birthday, Daddy ko ❤️<br><br>
+
+Happy Birthday, Daddy Ko ❤️
+
+<br><br>
 
 Thank you for being my favorite person, my safe place,
-my partner, my ka-chikahan, and my best friend.
+my best friend, and the best husband.
 
 Today is all about celebrating YOU.
 
-Before claiming your birthday reward, we need to verify
-that you are the Real Husband™.
+<br><br>
+
+But before claiming your reward...
+
+We need to verify your identity.
+
 </p>
 
+<br>
+
 <button onclick="startVerification()">
-Click Here
+CLICK HERE
 </button>
 
 </div>
 
 <div id="emojiRain"></div>
 
+<div id="popup" class="hidden">
+
+    <div class="popup-card">
+
+        <h2 id="popupTitle"></h2>
+
+        <br>
+
+        <p id="popupText"></p>
+
+        <input
+            id="birthdayInput"
+            class="hidden"
+            placeholder="MM/DD or Month Day"
+        >
+
+        <br><br>
+
+        <div id="popupButtons"></div>
+
+    </div>
+
+</div>
+
 <script>
+
+const CANVA_LINK = "PASTE-YOUR-CANVA-LINK-HERE";
 
 function startVerification(){
 
-let answer=confirm("SECURITY CHECK\n\nAre you Iah's husband?");
+    document.getElementById("popup").classList.remove("hidden");
 
-if(answer){
+    document.getElementById("popupTitle").innerText =
+    "🔒 HUSBAND AUTHENTICATION SYSTEM";
 
-let birthday=prompt("When is your birthday?\n\nFormat: MM/DD");
+    document.getElementById("popupText").innerText =
+    "Are you Iah's husband?";
 
-if(birthday==="12/3/98"){
+    document.getElementById("birthdayInput")
+    .classList.add("hidden");
 
-let love=confirm("FINAL SECURITY CHECK\n\nDO YOU LOVE YOUR WIFE?");
+    document.getElementById("popupButtons").innerHTML=`
+        <button onclick="showBirthdayQuestion()">YES</button>
+        <button onclick="showAngryMode()">NO</button>
+    `;
+}
 
-if(love || !love){
+function showBirthdayQuestion(){
 
-showSuccess();
+    document.getElementById("popupTitle").innerText =
+    "🛡️ IDENTITY VERIFICATION";
+
+    document.getElementById("popupText").innerText =
+    "When is your birthday?";
+
+    document.getElementById("birthdayInput")
+    .classList.remove("hidden");
+
+    document.getElementById("popupButtons").innerHTML=`
+        <button onclick="checkBirthday()">OK</button>
+    `;
+}
+
+function checkBirthday(){
+
+    let value =
+    document.getElementById("birthdayInput")
+    .value
+    .trim()
+    .toLowerCase();
+
+    if(
+        value==="12/3" ||
+        value==="dec 3" ||
+        value==="december 3"
+    ){
+
+        showLoveQuestion();
+
+    }else{
+
+        alert("⚠️ Suspicious user detected. Try again.");
+    }
 
 }
 
+function showLoveQuestion(){
+
+    document.getElementById("birthdayInput")
+    .classList.add("hidden");
+
+    document.getElementById("popupTitle").innerText =
+    "❤️ FINAL SECURITY CHECK";
+
+    document.getElementById("popupText").innerText =
+    "DO YOU LOVE YOUR WIFE?";
+
+    document.getElementById("popupButtons").innerHTML=`
+        <button onclick="showSuccess()">YES</button>
+        <button onclick="showSuccess()">OF COURSE</button>
+    `;
 }
-else{
 
-alert("⚠ Identity verification failed.\nSuspicious user detected.");
+function showSuccess(){
 
+    document.getElementById("popup")
+    .classList.add("hidden");
+
+    document.getElementById("mainCard").innerHTML=`
+
+    <h1>✅ AUTHENTICATION SUCCESSFUL</h1>
+
+    <p>
+
+    Identity Verified ✅
+
+    <br><br>
+
+    Husband Status: CONFIRMED
+
+    <br>
+
+    Love Level: 100%
+
+    <br>
+
+    Husband License: VALID
+
+    <br>
+
+    Wife Satisfaction Index: 99%
+
+    <br><br>
+
+    Warning:
+
+    User requires hugs immediately.
+
+    <br><br>
+
+    Congratulations!
+
+    You passed all security checks.
+
+    </p>
+
+    <br>
+
+    <button onclick="showReward()">
+    CLAIM REWARD
+    </button>
+
+    `;
 }
 
-}
-else{
+function showReward(){
 
-showAngryMode();
+    document.getElementById("mainCard").innerHTML=`
 
-}
+    <h1>🎁 REWARD UNLOCKED</h1>
+
+    <div id="loading" class="loading"></div>
+
+    `;
+    
+    let lines = [
+        "Verifying husband credentials... ✅",
+        "Loading birthday package... ✅",
+        "Loading memories... ✅",
+        "Loading wife.exe... ✅",
+        "Launching surprise... 🚀"
+    ];
+
+    let i = 0;
+
+    let timer = setInterval(()=>{
+
+        document.getElementById("loading").innerHTML +=
+        lines[i] + "<br><br>";
+
+        i++;
+
+        if(i >= lines.length){
+
+            clearInterval(timer);
+
+            setTimeout(()=>{
+
+                window.location.href = https://happy-daddae-day.my.canva.site;
+
+            },2000);
+
+        }
+
+    },1000);
 
 }
 
 function showAngryMode(){
 
-document.body.style.background="#7f1d1d";
+    document.getElementById("popup")
+    .classList.add("hidden");
 
-document.getElementById("mainCard").innerHTML=`
+    document.body.style.background="#7f1d1d";
 
-<h1>🚫 ACCESS DENIED 🚫</h1>
+    document.getElementById("mainCard").innerHTML=`
 
-<p>
-Only Iah's husband may proceed.<br><br>
-Nice try, stranger.
-</p>
+    <h1>😡 ACCESS DENIED</h1>
 
-<button onclick="location.reload()">
-Try Again
-</button>
+    <p>
 
-`;
+    Nice try.
 
-let container=document.getElementById("emojiRain");
+    <br><br>
 
-for(let i=0;i<80;i++){
+    Only Iah's husband may proceed.
 
-let emoji=document.createElement("div");
+    </p>
 
-emoji.classList.add("emoji");
+    <br>
 
-emoji.innerHTML="😡";
+    <button onclick="location.reload()">
+        TRY AGAIN
+    </button>
 
-emoji.style.left=Math.random()*100+"vw";
-emoji.style.animationDuration=(Math.random()*3+2)+"s";
+    `;
 
-container.appendChild(emoji);
+    const rain = document.getElementById("emojiRain");
 
-}
+    rain.innerHTML = "";
 
-}
+    for(let i=0;i<100;i++){
 
-function showSuccess(){
+        let emoji = document.createElement("div");
 
-document.getElementById("mainCard").innerHTML=`
+        emoji.className="emoji";
 
-<h1>✅ AUTHENTICATION SUCCESSFUL</h1>
+        emoji.innerText="😡";
 
-<p>
+        emoji.style.left=Math.random()*100+"vw";
 
-Identity verified.<br>
-Husband Status Confirmed.<br>
-Love Level Detected: 100% ❤️<br><br>
+        emoji.style.animationDuration=
+        (Math.random()*3+2)+"s";
 
-Congratulations!<br><br>
-
-You passed all security checks.
-
-</p>
-
-<h3>Your reward is waiting...</h3>
-
-<button onclick="showReward()">
-CLAIM REWARD
-</button>
-
-`;
-
-}
-
-function showReward(){
-
-document.getElementById("mainCard").innerHTML=`
-
-<h1>🎁 Birthday Reward Unlocked 🎁</h1>
-
-<p id="loadingText">
-Initializing surprise...
-</p>
-
-`;
-
-let messages = [
-"Verifying husband credentials... ✅",
-"Loading birthday package... ✅",
-"Loading memories... ✅",
-"Loading wife.exe... ✅",
-"Launching surprise... 🚀"
-];
-
-let counter = 0;
-
-let timer = setInterval(() => {
-
-document.getElementById("loadingText").innerHTML +=
-"<br>" + messages[counter];
-
-counter++;
-
-if(counter >= messages.length){
-
-clearInterval(timer);
-
-setTimeout(()=>{
-
-window.location.href="https://happy-daddae-day.my.canva.site";
-
-},2000);
-
-}
-
-},1000);
+        rain.appendChild(emoji);
+    }
 
 }
 
